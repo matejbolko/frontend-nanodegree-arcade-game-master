@@ -1,10 +1,10 @@
-var canvas = document.getElementById('mycanvas');
-const MAX_X = 505;
-const MAX_Y = 606;
 // Enemies our player must avoid
-var Enemy = function(x, y) {
+
+// enemy constructor (Setting the Enemy initial location and speed)
+var Enemy = function(x, y, speed) {
     this.x = x;
     this.y = y;
+    this.speed = speed;
     this.sprite = 'images/enemy-bug.png';
 };
 
@@ -14,6 +14,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x += this.speed * dt;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -21,20 +22,14 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
+// player constructor
 var Player = function(x, y) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
   this.x = x;
   this.y = y;
   this.sprite = 'images/char-boy.png';
 };
 
+// keyboard handling and set bounderies
 Player.prototype.handleInput  = function(keyPress) {
   if (keyPress == 'left' && this.x > 0){
     this.x -= 101;
@@ -65,7 +60,9 @@ Player.prototype.render = function() {
 // Place the player object in a variable called player
 let player = new Player(200, 400);
 let allEnemies = [];
-
+allEnemies.push(new Enemy(10,60,10))
+allEnemies.push(new Enemy(10,145,30))
+allEnemies.push(new Enemy(10,230,90))
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
