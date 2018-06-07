@@ -1,3 +1,52 @@
 body {
-    text-align: center;
+  text-align: center;
+  background-color: #DDDDDD;
+}
+
+li {
+  background: url('../images/Heart.png') bottom left no-repeat;
+  background-size: contain;
+  height: 50px;
+  width: 30px;
+}
+
+.scoreboard {
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  font-family: cursive;
+  font-variant: small-caps;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+#level {
+  width: 168px;
+  color: #111111;
+  text-align: left;
+}
+
+#score {
+  width: 168px;
+  color: #111111;
+  text-align: left;
+}
+
+#lives {
+  width: 168px;
+  color: #111111;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+  list-style-type: none;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.hide{
+  display:none;
 }

@@ -1,6 +1,9 @@
 // Enemies our player must avoid
-
 // enemy constructor (Setting the Enemy initial location and speed)
+
+let lives = 4
+let level = 0
+
 var Enemy = function (x, y, speed) {
   this.x = x
   this.y = y
@@ -12,32 +15,37 @@ var Enemy = function (x, y, speed) {
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function (dt) {
   // You should multiply any movement by the dt parameter
-  // which will ensure the game runs at the same speed for
-  // all computers.
+  // which will ensure the game runs at the same speed for all computers.
   this.x += this.speed * dt
-  // console.log('x-axis: ' + this.x)
-  // console.log('y-axis: ' + this.y)
-  // console.log('player-x-axis: ' + player.x)
-  // console.log('player-y-axis: ' + player.y)
-
-  // enemy-bug width == 101px
-  // enemy-bug width == 71px
 
   // colision detection
-  if (this.y === player.y && (this.x + 83) > player.x && (this.x) < (player.x + 83)) {
+  if (lives === 0) {
+    console.log('Game over')
+  }
+  else if (this.y === player.y && (this.x + 83) > player.x && (this.x) < (player.x + 83)) {
     console.log('colision')
+    document.querySelector('body').style.backgroundColor = '#FF4136'
+    player.reset()
     setTimeout(function () {
-      player.reset()
-    }, 100)
+      document.querySelector('body').style.backgroundColor = '#DDDDDD'
+      document.querySelector('body').style.transition = 'all 1s ease-out 0.1s'
+    }, 200)
+    document.querySelector('body').style.removeProperty('transition')
+    let list = document.getElementById('lives')
+    console.log(list)
+    list.removeChild(list.childNodes[0])
+    list.removeChild(list.childNodes[0])
+    lives--
   }
 }
 
 function GenerateEnemy () {
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
   let min = 2000
   let max = 5000
   let enemyYPosition = [56, 142, 228]
   var posY = enemyYPosition[Math.floor(Math.random() * enemyYPosition.length)]
-  let enemy = new Enemy(0, posY, Math.random() * 100)
+  let enemy = new Enemy(-101, posY, Math.random() * 100)
   allEnemies.push(enemy)
   setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
 }
@@ -68,19 +76,28 @@ Player.prototype.handleInput = function (keyPress) {
   if (keyPress === 'down' && this.y < 400) {
     this.y += 86
   }
+
+  // finishline - back to start
+  if (this.y === -30) {
+    player.reset()
+    level++
+    document.querySelector('#level').innerHTML = `level: ${level}`
+  }
 }
 
 Player.prototype.update = function (dt) {
+  if (this.y < -30) {
+    this.y = -30
+  }
+  if (this.y > 400) {
+    this.y = 400
+  }
+  if (this.x < 0) {
+    this.x = 0
+  }
   // You should multiply any movement by the dt parameter
   // which will ensure the game runs at the same speed for
   // all computers.
-
-  // finishline - back to start
-  if (this.y < 0) {
-    setTimeout(function () {
-      player.reset()
-    }, 500)
-  }
 }
 
 Player.prototype.render = function () {
@@ -109,7 +126,6 @@ enemyStartPosition.forEach(function (posY) {
 
 // randomly generate enemies
 GenerateEnemy()
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
