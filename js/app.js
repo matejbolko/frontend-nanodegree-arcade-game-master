@@ -19,9 +19,27 @@ Enemy.prototype.update = function (dt) {
   // console.log('y-axis: ' + this.y)
   // console.log('player-x-axis: ' + player.x)
   // console.log('player-y-axis: ' + player.y)
+
   // enemy-bug width == 101px
+  // enemy-bug width == 71px
 
   // colision detection
+  if (this.y === player.y && (this.x + 83) > player.x && (this.x) < (player.x + 83)) {
+    console.log('colision')
+    setTimeout(function () {
+      player.reset()
+    }, 100)
+  }
+}
+
+function GenerateEnemy () {
+  let min = 2000
+  let max = 5000
+  let enemyYPosition = [56, 142, 228]
+  var posY = enemyYPosition[Math.floor(Math.random() * enemyYPosition.length)]
+  let enemy = new Enemy(0, posY, Math.random() * 100)
+  allEnemies.push(enemy)
+  setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
 }
 
 // Draw the enemy on the screen, required method for game
@@ -50,18 +68,19 @@ Player.prototype.handleInput = function (keyPress) {
   if (keyPress === 'down' && this.y < 400) {
     this.y += 86
   }
-  // finishline - back to start
-  if (this.y < 0) {
-    setTimeout(function () {
-      player.reset()
-    }, 500)
-  }
 }
 
 Player.prototype.update = function (dt) {
   // You should multiply any movement by the dt parameter
   // which will ensure the game runs at the same speed for
   // all computers.
+
+  // finishline - back to start
+  if (this.y < 0) {
+    setTimeout(function () {
+      player.reset()
+    }, 500)
+  }
 }
 
 Player.prototype.render = function () {
@@ -80,10 +99,17 @@ Player.prototype.reset = function () {
 // Place the player object in a variable called player
 let player = new Player(200, 400)
 let allEnemies = []
-// Player y possibilities (step 86) - 56, 142, 228, 314, 400
-allEnemies.push(new Enemy(10, 56, 10))
-// allEnemies.push(new Enemy(10, 142, 30))
-// allEnemies.push(new Enemy(10, 228, 90))
+
+// generate 3 enemies on start
+let enemyStartPosition = [56, 142, 228]
+enemyStartPosition.forEach(function (posY) {
+  let enemy = new Enemy(100, posY, Math.random() * 100)
+  allEnemies.push(enemy)
+})
+
+// randomly generate enemies
+GenerateEnemy()
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
