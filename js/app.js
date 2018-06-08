@@ -3,6 +3,8 @@
 
 let lives = 4
 let level = 0
+let score = 0
+let allEnemies = []
 
 var Enemy = function (x, y, speed) {
   this.x = x
@@ -17,13 +19,12 @@ Enemy.prototype.update = function (dt) {
   // You should multiply any movement by the dt parameter
   // which will ensure the game runs at the same speed for all computers.
   this.x += this.speed * dt
-
-  // colision detection
+  // collision detection
   if (lives === 0) {
-    console.log('Game over')
+    gameOver()
   }
   else if (this.y === player.y && (this.x + 83) > player.x && (this.x) < (player.x + 83)) {
-    console.log('colision')
+    // console.log('colision')
     document.querySelector('body').style.backgroundColor = '#FF4136'
     player.reset()
     setTimeout(function () {
@@ -32,10 +33,11 @@ Enemy.prototype.update = function (dt) {
     }, 200)
     document.querySelector('body').style.removeProperty('transition')
     let list = document.getElementById('lives')
-    console.log(list)
     list.removeChild(list.childNodes[0])
     list.removeChild(list.childNodes[0])
     lives--
+    score = 0
+    document.querySelector('#score').innerHTML = `score: ${score}`
   }
 }
 
@@ -45,9 +47,25 @@ function GenerateEnemy () {
   let max = 5000
   let enemyYPosition = [56, 142, 228]
   var posY = enemyYPosition[Math.floor(Math.random() * enemyYPosition.length)]
-  let enemy = new Enemy(-101, posY, Math.random() * 100)
+  let enemy = new Enemy(-101, posY, Math.random() * 100 + 20 * level)
   allEnemies.push(enemy)
-  setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
+  if (level < 3) {
+    setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
+  }
+  else if (level >= 3 && level < 6) {
+    min = 1000
+    max = 3000
+    setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
+  }
+  else {
+    min = 500
+    max = 1000
+    // generate aditional enemy to make game harder
+    window.setInterval(function () {
+      enemy = new Enemy(100, posY, Math.random() * 100)
+    }, 2000)
+    setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
+  }
 }
 
 // Draw the enemy on the screen, required method for game
@@ -81,7 +99,9 @@ Player.prototype.handleInput = function (keyPress) {
   if (this.y === -30) {
     player.reset()
     level++
+    score++
     document.querySelector('#level').innerHTML = `level: ${level}`
+    document.querySelector('#score').innerHTML = `score: ${score}`
   }
 }
 
@@ -111,21 +131,42 @@ Player.prototype.reset = function () {
   // new Player(200, 400);
 }
 
+let player = new Player(200, 400)
+
+function gameStart () {
+  // generate 3 enemies on start
+  let enemyStartPosition = [56, 142, 228]
+  enemyStartPosition.forEach(function (posY) {
+    let enemy = new Enemy(100, posY, Math.random() * 100)
+    allEnemies.push(enemy)
+  })
+  // randomly generate enemies
+  GenerateEnemy()
+
+  document.getElementById('start-menu').style.display = 'none'
+  document.getElementById('disable-game').style.display = 'none'
+  document.getElementById('end-menu').style.display = 'none'
+}
+
+function gameOver () {
+  document.getElementById('disable-game').style.display = 'block'
+  document.getElementById('end-menu').style.display = 'block'
+
+  document.getElementById('score__score').innerHTML = level
+
+  let restartGame = document.getElementById('end-menu__restart')
+  restartGame.addEventListener('click', gameRestart)
+}
+
+function gameRestart () {
+  document.location.reload()
+}
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-let player = new Player(200, 400)
-let allEnemies = []
-
-// generate 3 enemies on start
-let enemyStartPosition = [56, 142, 228]
-enemyStartPosition.forEach(function (posY) {
-  let enemy = new Enemy(100, posY, Math.random() * 100)
-  allEnemies.push(enemy)
-})
-
-// randomly generate enemies
-GenerateEnemy()
+let startGame = document.getElementById('start-menu__start')
+startGame.addEventListener('click', gameStart)
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
