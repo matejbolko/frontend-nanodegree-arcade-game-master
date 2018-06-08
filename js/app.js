@@ -1,6 +1,5 @@
 // Enemies our player must avoid
 // enemy constructor (Setting the Enemy initial location and speed)
-
 let lives = 4
 let level = 0
 let score = 0
@@ -22,8 +21,7 @@ Enemy.prototype.update = function (dt) {
   // collision detection
   if (lives === 0) {
     gameOver()
-  }
-  else if (this.y === player.y && (this.x + 83) > player.x && (this.x) < (player.x + 83)) {
+  } else if (this.y === player.y && (this.x + 83) > player.x && (this.x) < (player.x + 83)) {
     // console.log('colision')
     document.querySelector('body').style.backgroundColor = '#FF4136'
     player.reset()
@@ -51,13 +49,11 @@ function GenerateEnemy () {
   allEnemies.push(enemy)
   if (level < 3) {
     setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
-  }
-  else if (level >= 3 && level < 6) {
+  } else if (level >= 3 && level < 6) {
     min = 1000
     max = 3000
     setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
-  }
-  else {
+  } else {
     min = 500
     max = 1000
     // generate aditional enemy to make game harder
@@ -74,7 +70,7 @@ Enemy.prototype.render = function () {
 }
 
 // player constructor
-var Player = function (x, y) {
+var Player = function (x, y, sprite) {
   this.x = x
   this.y = y
   this.sprite = 'images/char-boy.png'
@@ -131,7 +127,7 @@ Player.prototype.reset = function () {
   // new Player(200, 400);
 }
 
-let player = new Player(200, 400)
+let player = new Player(200, 400, 'images/char-boy.png')
 
 function gameStart () {
   // generate 3 enemies on start
@@ -179,3 +175,42 @@ document.addEventListener('keyup', function (e) {
   }
   player.handleInput(allowedKeys[e.keyCode])
 })
+
+// SLIDESHOW to chose avatar https://www.w3schools.com/w3css/w3css_slideshow.asp
+let slideIndex = 1
+showDivs(slideIndex)
+
+function plusDivs (n) {
+  showDivs(slideIndex += n)
+}
+
+function showDivs (n) {
+  var i
+  var x = document.getElementsByClassName('select-avatar__img')
+  if (n > x.length) {
+    slideIndex = 1
+  }
+  if (n < 1) {
+    slideIndex = x.length
+  }
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = 'none'
+    x[i].setAttribute('id', '')
+  }
+  x[slideIndex - 1].style.display = 'block'
+  x[slideIndex - 1].setAttribute('id', 'selected')
+
+  if (slideIndex === 1) {
+    player.sprite = 'images/char-boy.png'
+  } else if (slideIndex === 2) {
+    player.sprite = 'images/char-cat-girl.png'
+  } else if (slideIndex === 3) {
+    player.sprite = 'images/char-horn-girl.png'
+  } else if (slideIndex === 4) {
+    player.sprite = 'images/char-pink-girl.png'
+  } else if (slideIndex === 5) {
+    player.sprite = 'images/char-princess-girl.png'
+  } else {
+    player.sprite = 'images/char-boy.png'
+  }
+}

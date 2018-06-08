@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Effective JavaScript: Frogger</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -10,10 +11,16 @@
   <div id="disable-game"></div>
   <div id="start-menu">
     <div id="start-menu__title">Arcade Game</div>
-    <div id="start-menu__img">
-      <img src='./images/enemy-bug.png'>
-      <img src='./images/char-princess-girl.png'>
+    <div class="w3-content w3-display-container select-avatar">
+      <img class="select-avatar__img" src="./images/char-boy.png">
+      <img class="select-avatar__img" src="./images/char-cat-girl.png">
+      <img class="select-avatar__img" src="./images/char-horn-girl.png">
+      <img class="select-avatar__img" src="./images/char-pink-girl.png">
+      <img class="select-avatar__img" src="./images/char-princess-girl.png">
+      <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
+      <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
     </div>
+
     <div id="start-menu__start">Start Game</div>
   </div>
 
