@@ -68,6 +68,26 @@ var Engine = (function(global) {
         main();
     }
 
+    function checkCollisions(){
+      for(var i = 0; i < allEnemies.length; i++) {
+        if (allEnemies[i].y === player.y && (allEnemies[i].x + 83) > player.x && (allEnemies[i].x) < (player.x + 83)) {
+          // console.log('colision')
+          document.querySelector('body').style.backgroundColor = '#FF4136'
+          player.reset()
+          setTimeout(function () {
+            document.querySelector('body').style.backgroundColor = '#DDDDDD'
+            document.querySelector('body').style.transition = 'all 1s ease-out 0.1s'
+          }, 200)
+          document.querySelector('body').style.removeProperty('transition')
+          let list = document.getElementById('lives')
+          list.removeChild(list.childNodes[0])
+          list.removeChild(list.childNodes[0])
+          gameParams.lives -= 1
+          gameParams.score = 0
+          document.querySelector('#score').innerHTML = `score: ${gameParams.score}`
+        }
+      }
+    }
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
      * you implement your collision detection (when two entities occupy the
@@ -79,7 +99,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function and loops through all of the

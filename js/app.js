@@ -1,8 +1,12 @@
 // Enemies our player must avoid
 // enemy constructor (Setting the Enemy initial location and speed)
-let lives = 4
-let level = 0
-let score = 0
+var GameParams = function (lives, level, score) {
+  this.lives = lives
+  this.level = level
+  this.score = score
+}
+
+let gameParams = new GameParams(4, 0, 0)
 let allEnemies = []
 
 var Enemy = function (x, y, speed) {
@@ -19,23 +23,8 @@ Enemy.prototype.update = function (dt) {
   // which will ensure the game runs at the same speed for all computers.
   this.x += this.speed * dt
   // collision detection
-  if (lives === 0) {
+  if (gameParams.lives === 0) {
     gameOver()
-  } else if (this.y === player.y && (this.x + 83) > player.x && (this.x) < (player.x + 83)) {
-    // console.log('colision')
-    document.querySelector('body').style.backgroundColor = '#FF4136'
-    player.reset()
-    setTimeout(function () {
-      document.querySelector('body').style.backgroundColor = '#DDDDDD'
-      document.querySelector('body').style.transition = 'all 1s ease-out 0.1s'
-    }, 200)
-    document.querySelector('body').style.removeProperty('transition')
-    let list = document.getElementById('lives')
-    list.removeChild(list.childNodes[0])
-    list.removeChild(list.childNodes[0])
-    lives--
-    score = 0
-    document.querySelector('#score').innerHTML = `score: ${score}`
   }
 }
 
@@ -45,11 +34,11 @@ function GenerateEnemy () {
   let max = 5000
   let enemyYPosition = [56, 142, 228]
   var posY = enemyYPosition[Math.floor(Math.random() * enemyYPosition.length)]
-  let enemy = new Enemy(-101, posY, Math.random() * 100 + 20 * level)
+  let enemy = new Enemy(-101, posY, Math.random() * 100 + 20 * gameParams.level)
   allEnemies.push(enemy)
-  if (level < 3) {
+  if (gameParams.level < 3) {
     setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
-  } else if (level >= 3 && level < 6) {
+  } else if (gameParams.level >= 3 && gameParams.level < 6) {
     min = 1000
     max = 3000
     setTimeout(GenerateEnemy, Math.random() * (max - min) + min)
@@ -93,11 +82,11 @@ Player.prototype.handleInput = function (keyPress) {
 
   // finishline - back to start
   if (this.y === -30) {
-    player.reset()
-    level++
-    score++
-    document.querySelector('#level').innerHTML = `level: ${level}`
-    document.querySelector('#score').innerHTML = `score: ${score}`
+    this.reset()
+    gameParams.level++
+    gameParams.score++
+    document.querySelector('#level').innerHTML = `level: ${gameParams.level}`
+    document.querySelector('#score').innerHTML = `score: ${gameParams.score}`
   }
 }
 
@@ -148,7 +137,7 @@ function gameOver () {
   document.getElementById('disable-game').style.display = 'block'
   document.getElementById('end-menu').style.display = 'block'
 
-  document.getElementById('score__score').innerHTML = level
+  document.getElementById('score__score').innerHTML = gameParams.level
 
   let restartGame = document.getElementById('end-menu__restart')
   restartGame.addEventListener('click', gameRestart)
