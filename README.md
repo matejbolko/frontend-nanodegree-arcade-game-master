@@ -6,9 +6,9 @@ In this game you have a Player and Enemies (Bugs). The goal of the player is to 
 
 ### How to run the game:
 1. you can clone or download the source repository from Github.
-- If you are cloning repository, then on the command line, enter:
+- In case you are cloning repository: go to the command line and enter:
 git clone https://github.com/matejbolko/frontend-nanodegree-arcade-game-master.git
-- if you are downloading repository, click on "download ZIP" or direct link: https://github.com/matejbolko/frontend-nanodegree-arcade-game-master/archive/master.zip
+- In case you are downloading repository, click on "download ZIP" or direct link: https://github.com/matejbolko/frontend-nanodegree-arcade-game-master/archive/master.zip
 2. Run the index.html in your browser (browser needs to support HTML5 Canvas and have enabled javascript)
 
 
